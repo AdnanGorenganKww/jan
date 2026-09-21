@@ -1,0 +1,860 @@
+/* ==========================================
+   1. CSS VARIABLES & DESIGN SYSTEM
+   ========================================== */
+:root {
+    /* Color Palette */
+    --color-bg: #0B130E;             /* Hijau gelap pekat latar utama */
+    --color-surface: #122017;        /* Hijau lumut malam */
+    --color-surface-card: #182B1F;   /* Hijau daun pekat untuk kartu */
+    --color-text-primary: #F4F6F0;   /* Putih gading bunga Lily */
+    --color-text-muted: #A3B8A8;     /* Hijau pudar lembut untuk teks sekunder */
+    --color-accent: #E2FAAD;         /* Pendar cahaya kunang-kunang */
+    --color-stem: #3E5F43;           /* Batang & daun */
+    --color-border: rgba(244, 246, 240, 0.12);
+
+    /* Typography */
+    --font-serif: 'Cormorant Garamond', Georgia, serif;
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-script: 'Alex Brush', cursive;
+
+    /* Transitions & FX */
+    --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-fast: all 0.3s ease;
+    --radius-card: 16px;
+    --radius-btn: 30px;
+}
+
+/* ==========================================
+   2. GLOBAL RESET & BASE STYLES
+   ========================================== */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    overflow-x: hidden;
+}
+
+body {
+    min-height: 100vh;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+}
+
+main {
+    position: relative;
+    z-index: 2;
+}
+
+/* ==========================================
+   3. ATMOSPHERIC FX LAYERS
+   ========================================== */
+#ambient-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+#fireflies-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.fog-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background: radial-gradient(ellipse at center, rgba(37, 61, 42, 0.2) 0%, rgba(11, 19, 14, 0) 70%);
+    opacity: 0.4;
+}
+
+.fog-1 {
+    animation: fogMove 35s linear infinite alternate;
+}
+
+.fog-2 {
+    animation: fogMove 50s linear infinite reverse;
+    top: -20%;
+}
+
+@keyframes fogMove {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-40%); }
+}
+
+.vignette-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, transparent 40%, rgba(5, 10, 7, 0.85) 100%);
+}
+
+/* ==========================================
+   4. AUDIO CONTROL BUTTON
+   ========================================== */
+.audio-btn {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 100;
+    background: rgba(18, 32, 23, 0.6);
+    border: 1px solid var(--color-border);
+    backdrop-filter: blur(8px);
+    color: var(--color-text-primary);
+    padding: 10px 18px;
+    border-radius: var(--radius-btn);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    transition: var(--transition-fast);
+}
+
+.audio-btn:hover {
+    background: rgba(24, 43, 31, 0.85);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 12px rgba(226, 250, 173, 0.2);
+}
+
+.audio-btn[data-playing="true"] .audio-icon {
+    animation: pulseGlow 2s infinite alternate;
+}
+
+@keyframes pulseGlow {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.15); opacity: 1; }
+}
+
+/* ==========================================
+   5. SECTION 1: OPENING / INTRO
+   ========================================== */
+.section-hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    position: relative;
+}
+
+.intro-container {
+    max-width: 650px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+}
+
+.text-sequence {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.intro-text {
+    font-family: var(--font-serif);
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-weight: 300;
+    color: var(--color-text-primary);
+    opacity: 0;
+    transform: translateY(15px);
+    animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.intro-text.line-1 { animation-delay: 0.5s; }
+.intro-text.line-2 { animation-delay: 1.8s; }
+.intro-text.line-3 { 
+    animation-delay: 3.1s; 
+    font-style: italic;
+    color: var(--color-text-muted);
+}
+
+.btn-primary {
+    background: transparent;
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+    padding: 12px 32px;
+    border-radius: var(--radius-btn);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    animation: fadeIn 1.5s ease forwards;
+    animation-delay: 4.2s;
+    transition: var(--transition-fast);
+}
+
+.btn-primary:hover {
+    border-color: var(--color-text-primary);
+    background: rgba(244, 246, 240, 0.05);
+    box-shadow: 0 0 20px rgba(244, 246, 240, 0.15);
+}
+
+.btn-arrow {
+    transition: transform 0.3s ease;
+}
+
+.btn-primary:hover .btn-arrow {
+    transform: translateY(3px);
+}
+
+/* Keyframe Utility Animasi Dasar */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+/* ==========================================
+   6. SECTION 2: THE VALLEY
+   ========================================== */
+.section-valley {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 4rem 2rem;
+}
+
+.valley-content {
+    text-align: center;
+}
+
+.valley-hint {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--color-text-muted);
+    letter-spacing: 0.08em;
+    animation: hintPulse 3s infinite ease-in-out;
+}
+
+@keyframes hintPulse {
+    0%, 100% { opacity: 0.3; transform: translateY(0); }
+    50% { opacity: 0.8; transform: translateY(6px); }
+}
+
+/* ==========================================
+   7. SECTION 3: FLOWER REVEAL & SVG GROWTH
+   ========================================== */
+.section-reveal {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    position: relative;
+}
+
+.reveal-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+    max-width: 600px;
+    text-align: center;
+}
+
+.plant-container {
+    width: 280px;
+    height: 420px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.lily-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+/* ==========================================
+   REVISED SVG ANIMATION (PART 4B FIX)
+   ========================================== */
+.svg-stem {
+    stroke-dasharray: 700;
+    stroke-dashoffset: 700;
+    transition: stroke-dashoffset 2.2s cubic-bezier(0.37, 0, 0.63, 1);
+}
+
+.pedicel {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.ped-1 { transition-delay: 1.2s; }
+.ped-2 { transition-delay: 1.4s; }
+.ped-3 { transition-delay: 1.6s; }
+.ped-4 { transition-delay: 1.8s; }
+.ped-5 { transition-delay: 2.0s; }
+
+.bell {
+    opacity: 0;
+    transform-origin: center top;
+    transform: scale(0);
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.bell-1 { transition-delay: 1.3s; }
+.bell-2 { transition-delay: 1.5s; }
+.bell-3 { transition-delay: 1.7s; }
+.bell-4 { transition-delay: 1.9s; }
+.bell-5 { transition-delay: 2.1s; }
+
+/* Trigger animasi saat scroll masuk section */
+.section-reveal.animate-growth .svg-stem {
+    stroke-dashoffset: 0;
+}
+
+.section-reveal.animate-growth .pedicel {
+    opacity: 1;
+}
+
+.section-reveal.animate-growth .bell {
+    opacity: 1;
+    transform: scale(1);
+    filter: drop-shadow(0 2px 8px rgba(244, 246, 240, 0.5));
+}
+
+/* ==========================================
+   8. SECTION 4: WHY THIS FLOWER (CARDS)
+   ========================================== */
+.section-cards {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 2rem;
+}
+
+.cards-container {
+    max-width: 1000px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4rem;
+}
+
+.section-title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 300;
+    color: var(--color-text-primary);
+    text-align: center;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    width: 100%;
+}
+
+.card-item {
+    background: var(--color-surface-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    padding: 2.5rem 1.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: var(--transition-smooth);
+    backdrop-filter: blur(4px);
+}
+
+.card-item.card-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.card-item[data-step="1"] { transition-delay: 0.2s; }
+.card-item[data-step="2"] { transition-delay: 0.4s; }
+.card-item[data-step="3"] { transition-delay: 0.6s; }
+
+.card-item:hover {
+    border-color: rgba(226, 250, 173, 0.4);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+.card-number {
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+}
+
+.card-title {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--color-text-primary);
+}
+
+.card-desc {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    font-weight: 300;
+}
+
+.cards-conclusion {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--color-text-muted);
+    text-align: center;
+}
+
+/* ==========================================
+   9. SECTION 5: INTERACTIVE GARDEN
+   ========================================== */
+.section-garden {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    position: relative;
+}
+
+.garden-wrapper {
+    max-width: 700px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    text-align: center;
+}
+
+.garden-title {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+}
+
+.garden-instruction {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+}
+
+.garden-field {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+    padding: 2rem;
+}
+
+.interactive-flower {
+    background: transparent;
+    border: none;
+    font-size: 2.5rem;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+    transition: transform 1s ease;
+    filter: drop-shadow(0 0 6px rgba(244, 246, 240, 0.2));
+}
+
+.interactive-flower:hover {
+    transform: scale(1.25) rotate(8deg);
+    filter: drop-shadow(0 0 12px rgba(226, 250, 173, 0.8));
+}
+
+.interactive-flower.sway {
+    animation: swayAnim 4s ease-in-out;
+}
+
+@keyframes swayAnim {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(-15deg) scale(1.1); }
+    50% { transform: rotate(12deg) scale(1.1); }
+    75% { transform: rotate(-5deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.toast-popup {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(18, 32, 23, 0.9);
+    border: 1px solid var(--color-border);
+    backdrop-filter: blur(10px);
+    color: var(--color-text-primary);
+    padding: 12px 28px;
+    border-radius: var(--radius-btn);
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 90;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.toast-popup.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ==========================================
+   10. SECTION 6: HIDDEN MESSAGE PUZZLE
+   ========================================== */
+.section-hidden {
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    background: radial-gradient(circle at center, rgba(18, 32, 23, 0.5) 0%, transparent 70%);
+}
+
+.hidden-container {
+    max-width: 600px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    text-align: center;
+}
+
+.hidden-hint {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--color-text-muted);
+}
+
+.hidden-search-area {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+}
+
+.secret-flower {
+    background: transparent;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 50%;
+    transition: var(--transition-fast);
+    position: relative;
+}
+
+.secret-flower .flower-glow {
+    display: inline-block;
+    animation: gentlePulse 2.5s infinite alternate;
+}
+
+@keyframes gentlePulse {
+    0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(244, 246, 240, 0.2)); }
+    100% { transform: scale(1.15); filter: drop-shadow(0 0 10px rgba(226, 250, 173, 0.6)); }
+}
+
+.secret-flower.found {
+    opacity: 0.4;
+    cursor: default;
+    transform: scale(0.9);
+}
+
+.secret-flower.found .flower-glow {
+    animation: none;
+    filter: none;
+}
+
+.word-slots {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.slot {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    letter-spacing: 0.15em;
+    color: var(--color-text-muted);
+    min-width: 90px;
+    padding-bottom: 6px;
+    border-bottom: 1px border var(--color-border);
+    transition: var(--transition-fast);
+}
+
+.slot.filled {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+    text-shadow: 0 0 10px rgba(226, 250, 173, 0.4);
+}
+
+.puzzle-complete {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.puzzle-complete.hidden {
+    display: none;
+}
+
+.puzzle-complete.fade-in {
+    animation: fadeIn 1s ease forwards;
+}
+
+.complete-text {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    letter-spacing: 0.1em;
+    color: var(--color-text-primary);
+}
+
+.btn-secondary {
+    background: rgba(244, 246, 240, 0.05);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+    padding: 12px 28px;
+    border-radius: var(--radius-btn);
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.btn-secondary:hover {
+    background: rgba(244, 246, 240, 0.12);
+    border-color: var(--color-text-primary);
+    box-shadow: 0 0 15px rgba(244, 246, 240, 0.2);
+}
+/* ==========================================
+   11. SECTION 7: FINAL LETTER & ENDING
+   ========================================== */
+.section-ending {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 2rem;
+    position: relative;
+    background: radial-gradient(circle at center, rgba(18, 32, 23, 0.8) 0%, var(--color-bg) 80%);
+}
+
+.section-ending.hidden {
+    display: none;
+}
+
+.ending-container {
+    max-width: 580px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    text-align: center;
+}
+
+.ending-flower-icon {
+    opacity: 0.85;
+    filter: drop-shadow(0 0 10px rgba(244, 246, 240, 0.3));
+    animation: subtleFloat 4s infinite ease-in-out alternate;
+}
+
+@keyframes subtleFloat {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-8px); }
+}
+
+.letter-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.letter-line {
+    font-family: var(--font-serif);
+    font-size: clamp(1.25rem, 3.5vw, 1.75rem);
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--color-text-primary);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.letter-line.highlight {
+    color: var(--color-accent);
+    font-style: italic;
+    text-shadow: 0 0 15px rgba(226, 250, 173, 0.3);
+}
+
+.letter-line.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.letter-footer {
+    margin-top: 1.5rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 1.5s ease, transform 1.5s ease;
+}
+
+.letter-footer.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.signature {
+    font-family: var(--font-script);
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    color: var(--color-text-primary);
+    letter-spacing: 0.05em;
+}
+
+/* ==========================================
+   12. RESPONSIVE DESIGN (TABLET & MOBILE)
+   ========================================== */
+
+/* Tablet (768px - 1199px) */
+@media (max-width: 1199px) {
+    .cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.25rem;
+    }
+
+    .card-item {
+        padding: 2rem 1.25rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .cards-grid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+    }
+
+    .hidden-search-area {
+        gap: 2rem;
+    }
+}
+
+/* Mobile (≤ 767px) */
+@media (max-width: 767px) {
+    html {
+        font-size: 15px;
+    }
+
+    .audio-btn {
+        top: 16px;
+        right: 16px;
+        padding: 8px 14px;
+        font-size: 0.8rem;
+    }
+
+    .plant-container {
+        width: 220px;
+        height: 340px;
+    }
+
+    .garden-field {
+        gap: 1.5rem;
+    }
+
+    .interactive-flower {
+        font-size: 2rem;
+    }
+
+    .hidden-search-area {
+        gap: 1.25rem;
+    }
+
+    .secret-flower {
+        font-size: 1.75rem;
+        padding: 10px;
+    }
+
+    .word-slots {
+        gap: 0.75rem;
+    }
+
+    .slot {
+        min-width: 70px;
+        font-size: 1rem;
+    }
+
+    .toast-popup {
+        width: 85%;
+        text-align: center;
+        font-size: 0.85rem;
+    }
+}
+
+/* ==========================================
+   13. ACCESSIBILITY (REDUCED MOTION)
+   ========================================== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .svg-stem {
+        stroke-dashoffset: 0 !important;
+    }
+
+    .svg-leaf,
+    .bell,
+    .reveal-text-content,
+    .letter-line,
+    .card-item {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesuatu yang Kecil — Lily of the Valley</title>
+    <meta name="description" content="Sebuah pengalaman visual interaktif tentang hal-hal kecil yang tenang dan berharga.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Ambient Ambient & FX Layers -->
+    <div id="ambient-container" aria-hidden="true">
+        <canvas id="fireflies-canvas"></canvas>
+        <div class="fog-layer fog-1"></div>
+        <div class="fog-layer fog-2"></div>
+        <div class="vignette-overlay"></div>
+    </div>
+
+    <!-- Audio Control Toggle -->
+    <button id="audio-control" class="audio-btn" aria-label="Nyalakan atau matikan musik latar" data-playing="false">
+        <span class="audio-icon" aria-hidden="true">🎵</span>
+        <span class="audio-text">Atmosfer</span>
+    </button>
+    <audio id="bg-music" loop preload="auto">
+        <source src="assets/audio/ambient.mp3" type="audio/mpeg">
+    </audio>
+
+    <main id="main-content">
+
+        <!-- SECTION 1: OPENING / INTRO -->
+        <section id="opening" class="section-hero" aria-label="Pembuka">
+            <div class="intro-container">
+                <div class="text-sequence" aria-live="polite">
+                    <p class="intro-text line-1">Aku menemukan sesuatu...</p>
+                    <p class="intro-text line-2">Sesuatu yang kecil.</p>
+                    <p class="intro-text line-3">Tapi entah kenapa, rasanya indah.</p>
+                </div>
+                <button id="btn-explore" class="btn-primary" aria-label="Masuk dan lihat selengkapnya">
+                    <span>Lihat</span>
+                    <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 5v14M19 12l-7 7-7-7"/>
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- SECTION 2: THE VALLEY -->
+        <section id="valley" class="section-valley" aria-label="Suasana Hutan">
+            <div class="valley-content">
+                <p class="valley-hint">Perlahan scroll ke bawah...</p>
+                <div class="parallax-elements" aria-hidden="true">
+                    <div class="foliage foliage-left"></div>
+                    <div class="foliage foliage-right"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: FLOWER REVEAL -->
+        <section id="flower-reveal" class="section-reveal" aria-label="Lily of the Valley Reveal">
+            <div class="reveal-wrapper">
+                <!-- SVG Plant Canvas Container -->
+                <div class="plant-container" id="plant-svg-wrapper">
+                    <svg class="lily-svg" viewBox="0 0 300 500" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustrasi bunga Lily of the Valley">
+    <!-- Tanah / Ground Line -->
+    <path class="svg-ground" d="M 40 470 Q 150 462 260 470" stroke="#3A573F" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Daun Kiri & Right -->
+    <path class="svg-leaf leaf-left" d="M 150 465 C 70 410 50 290 105 200 C 130 250 142 360 150 465 Z" fill="#1C3322" stroke="#486D4D" stroke-width="2"/>
+    <path class="svg-leaf leaf-right" d="M 150 465 C 230 400 240 280 185 210 C 168 260 158 370 150 465 Z" fill="#233E2A" stroke="#537C58" stroke-width="2"/>
+    
+    <!-- Batang Utama (Warna lebih terang agar kelihatan jelas) -->
+    <path class="svg-stem" d="M 150 465 C 150 330 162 230 156 200 C 148 168 132 130 110 105 C 95 88 80 85 72 88" stroke="#7FA984" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+    
+    <!-- Tangkai Kecil Penopang (Pedicels) -->
+    <g class="svg-pedicels">
+        <path class="pedicel ped-1" d="M 156 200 Q 166 202 173 210" stroke="#7FA984" stroke-width="2.5" fill="none"/>
+        <path class="pedicel ped-2" d="M 150 165 Q 158 167 164 172" stroke="#7FA984" stroke-width="2.5" fill="none"/>
+        <path class="pedicel ped-3" d="M 138 135 Q 145 136 150 140" stroke="#7FA984" stroke-width="2.5" fill="none"/>
+        <path class="pedicel ped-4" d="M 116 110 Q 121 111 124 113" stroke="#7FA984" stroke-width="2.5" fill="none"/>
+        <path class="pedicel ped-5" d="M 85 90 Q 87 90 89 91" stroke="#7FA984" stroke-width="2.5" fill="none"/>
+    </g>
+
+    <!-- Kelopak Bunga Lonceng (Lily Bells) -->
+    <g class="svg-bells">
+        <!-- Bell 1 (Bawah) -->
+        <g transform="translate(173, 210)">
+            <g class="bell bell-1">
+                <path d="M 0 0 C -4 5 -11 8 -11 16 C -11 20 -6 22 0 22 C 6 22 11 20 11 16 C 11 8 4 5 0 0 Z" fill="#F4F6F0"/>
+                <path d="M -11 16 Q -5 19 0 16 Q 5 19 11 16" stroke="#E2FAAD" stroke-width="1" fill="none" opacity="0.6"/>
+            </g>
+        </g>
+        <!-- Bell 2 -->
+        <g transform="translate(164, 172)">
+            <g class="bell bell-2">
+                <path d="M 0 0 C -4 5 -10 8 -10 15 C -10 19 -5 21 0 21 C 5 21 10 19 10 15 C 10 8 4 5 0 0 Z" fill="#F4F6F0"/>
+                <path d="M -10 15 Q -5 18 0 15 Q 5 18 10 15" stroke="#E2FAAD" stroke-width="1" fill="none" opacity="0.6"/>
+            </g>
+        </g>
+        <!-- Bell 3 -->
+        <g transform="translate(150, 140)">
+            <g class="bell bell-3">
+                <path d="M 0 0 C -3 4 -9 7 -9 14 C -9 18 -5 20 0 20 C 5 20 9 18 9 14 C 9 7 3 4 0 0 Z" fill="#F4F6F0"/>
+            </g>
+        </g>
+        <!-- Bell 4 -->
+        <g transform="translate(124, 113)">
+            <g class="bell bell-4">
+                <path d="M 0 0 C -3 4 -8 6 -8 12 C -8 15 -4 17 0 17 C 4 17 8 15 8 12 C 8 6 3 4 0 0 Z" fill="#F4F6F0"/>
+            </g>
+        </g>
+        <!-- Bell 5 (Kuncup Atas) -->
+        <g transform="translate(89, 91)">
+            <g class="bell bell-5">
+                <path d="M 0 0 C -2 3 -6 5 -6 9 C -6 12 -3 13 0 13 C 3 13 6 12 6 9 C 6 5 2 3 0 0 Z" fill="#EBF0E4"/>
+            </g>
+        </g>
+    </g>
+</svg>
+                </div>
+
+                <div class="reveal-text-content">
+                    <h1 class="plant-title">Lily of the Valley</h1>
+                    <p class="plant-subtitle">Bunga kecil ini kuberikan hanya untuk Jan.
+Sederhana, tapi dibuat dengan sengaja—
+karena memang kaulah yang memintanya.
+</p>
+                </div>
+            </div>
+        </section>
+        <!-- SECTION 4: WHY THIS FLOWER -->
+        <section id="why-flower" class="section-cards" aria-label="Alasan Memilih Bunga Ini">
+            <div class="cards-container">
+                <h2 class="section-title">Tapi kenapa bunga ini?</h2>
+                <div class="cards-grid">
+                    <article class="card-item" data-step="1">
+                        <span class="card-number">01</span>
+                        <h3 class="card-title">Kecil</h3>
+                        <p class="card-desc">Tidak perlu menjadi sesuatu yang besar untuk terlihat berarti.</p>
+                    </article>
+                    <article class="card-item" data-step="2">
+                        <span class="card-number">02</span>
+                        <h3 class="card-title">Sederhana</h3>
+                        <p class="card-desc">Bentuknya sederhana, tapi justru itu yang membuatnya menarik.</p>
+                    </article>
+                    <article class="card-item" data-step="3">
+                        <span class="card-number">03</span>
+                        <h3 class="card-title">Diam-diam Indah</h3>
+                        <p class="card-desc">Ada hal-hal yang tidak perlu berusaha keras untuk menjadi indah.</p>
+                    </article>
+                </div>
+                <p class="cards-conclusion">Mungkin itu alasan kamu menyuruhku untuk memberimu bunga ini.</p>
+            </div>
+        </section>
+
+        <!-- SECTION 5: INTERACTIVE GARDEN -->
+        <section id="interactive-garden" class="section-garden" aria-label="Taman Interaktif">
+            <div class="garden-wrapper">
+                <div class="garden-header">
+                    <h2 class="garden-title">Taman Kecil</h2>
+                    <p class="garden-instruction">Coba sentuh salah satu bunganya, Lalu...</p>
+                </div>
+                
+                <div class="garden-field" id="flower-field">
+                    <!-- Interactive Flower Nodes -->
+                    <button class="interactive-flower" data-message="hai Jan." aria-label="Sentuh bunga 1">
+                        <span class="flower-icon">🌸</span>
+                    </button>
+                    <button class="interactive-flower" data-message="Aku membuatnya effort banget buat kamu Jan." aria-label="Sentuh bunga 2">
+                        <span class="flower-icon">🌸</span>
+                    </button>
+                    <button class="interactive-flower" data-message="Jangan tiba tiba lost contact ya Jan." aria-label="Sentuh bunga 3">
+                        <span class="flower-icon">🌸</span>
+                    </button>
+                    <button class="interactive-flower" data-message="Semoga setelah ini, hari-hari kamu selalu punya alasan kecil untuk tersenyum yahh." aria-label="Sentuh bunga 4">
+                        <span class="flower-icon">🌸</span>
+                    </button>
+                    <button class="interactive-flower" data-message="Dan bunga kecil ini... khusus untuk kamu. Terima kasih sudah mau menunggu sampai akhirnya selesai. 🤍" aria-label="Sentuh bunga 5">
+                        <span class="flower-icon">🌸</span>
+                    </button>
+                    <div class="garden-header">
+                    <p class="garden-instruction">Scroll ke bawah untuk melihat pesan tersembunyi.</p>
+                </div>
+                </div>
+
+                <!-- Floating Toast Popup Container -->
+                <div id="flower-toast" class="toast-popup" aria-live="polite" aria-atomic="true"></div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: HIDDEN MESSAGE PUZZLE -->
+        <section id="hidden-message" class="section-hidden" aria-label="Pesan Tersembunyi">
+            <div class="hidden-container">
+                <p class="hidden-hint">Katanya, selalu ada sesuatu yang tersembunyi di sebuah taman.</p>
+                
+                <div class="hidden-search-area">
+                    <button class="secret-flower" data-word="TERIMA" aria-label="Bunga Rahasia 1">
+                        <span class="flower-glow">🌸</span>
+                    </button>
+                    <button class="secret-flower" data-word="KASIH" aria-label="Bunga Rahasia 2">
+                        <span class="flower-glow">🌸</span>
+                    </button>
+                    <button class="secret-flower" data-word="SUDAH" aria-label="Bunga Rahasia 3">
+                        <span class="flower-glow">🌸</span>
+                    </button>
+                </div>
+
+                <!-- Word Collection Display -->
+                <div class="word-slots" id="word-slots">
+                    <span class="slot" data-index="1">___</span>
+                    <span class="slot" data-index="2">___</span>
+                    <span class="slot" data-index="3">___</span>
+                </div>
+
+                <div id="puzzle-complete-box" class="puzzle-complete hidden">
+                    <p class="complete-text">Terima kasih sudah menghubungiku lebih dulu, Jan.
+Kalau waktu itu kamu nggak menghubungiku, mungkin bunga kecil ini nggak akan pernah ada wkwk.
+</p>
+                    <button id="btn-to-ending" class="btn-secondary">
+                        <span>masih ada satu hal lagi...</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 7: FINAL LETTER / ENDING -->
+        <section id="final-letter" class="section-ending hidden" aria-label="Surat Akhir">
+            <div class="ending-container">
+                <div class="ending-flower-icon" aria-hidden="true">
+                    <svg width="60" height="90" viewBox="0 0 100 150" fill="none">
+                        <path d="M 50 140 C 48 100 52 60 35 20" stroke="#8EA893" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M 50 140 C 35 125 20 95 30 75 C 37 85 45 110 50 140 Z" fill="#2E4A34"/>
+                        <circle cx="33" cy="25" r="7" fill="#F4F6F0"/>
+                        <circle cx="28" cy="40" r="8" fill="#F4F6F0"/>
+                        <circle cx="38" cy="58" r="8.5" fill="#F4F6F0"/>
+                    </svg>
+                </div>
+
+                <div class="letter-body">
+                    <p class="letter-line fade-line" data-delay="1">Mungkin kamu mau bertanya...</p>
+                    <p class="letter-line fade-line" data-delay="2">kenapa Aku membuat ini?</p>
+                    <p class="letter-line fade-line" data-delay="3">Mungkin sebenarnya...</p>
+                    <p class="letter-line fade-line" data-delay="4">aku cuma ingin memberikan sesuatu yang sederhana.</p>
+                    <p class="letter-line fade-line highlight" data-delay="5">Tapi dibuat khusus untuk kamu.</p>
+                </div>
+
+                <footer class="letter-footer fade-line" data-delay="6">
+                    <p class="signature">— Created By Adnan</p>
+                </footer>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- External JS Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
